@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Edit, Trash2, Plus, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useProducts } from '@/context/product-context'
+import { useProducts, Product } from '@/context/product-context'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import Loading from './loading'
@@ -20,11 +20,12 @@ type ProductFormData = {
 }
 
 export default function AdminProducts() {
-  const { products, loading, error, addProduct, deleteProduct } = useProducts()
+  const { products, loading, error, addProduct, updateProduct, deleteProduct } = useProducts()
   const searchParams = useSearchParams()
 
   const [searchQuery, setSearchQuery] = useState('')
   const [showForm, setShowForm] = useState(false)
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [formData, setFormData] = useState<ProductFormData>({
     name: '',
     description: '',
@@ -94,6 +95,76 @@ export default function AdminProducts() {
     }
   }
 
+  const handleEditProduct = (product: Product) => {
+    setEditingProduct(product)
+    setFormData({
+      name: product.name,
+      description: product.description || '',
+      price: product.price.toString(),
+      stock: product.stock.toString(),
+      status: product.status,
+      image_url: product.image_url || '',
+      image_file: null,
+    })
+    setShowForm(true)
+  }
+
+  const handleUpdateProduct = async () => {
+    if (editingProduct && formData.name && formData.price && formData.stock) {
+      try {
+        setIsSubmitting(true)
+        let imageUrl = formData.image_url
+
+        // Upload file to Supabase storage if a file is selected
+        if (formData.image_file) {
+          const fileExt = formData.image_file.name.split('.').pop()
+          const fileName = `${Math.random()}.${fileExt}`
+          const filePath = `products/${fileName}`
+
+          const { error: uploadError } = await supabase.storage
+            .from('images')
+            .upload(filePath, formData.image_file)
+
+          if (uploadError) {
+            throw uploadError
+          }
+
+          const { data } = supabase.storage
+            .from('images')
+            .getPublicUrl(filePath)
+
+          imageUrl = data.publicUrl
+        }
+
+        await updateProduct(editingProduct.id, {
+          name: formData.name,
+          description: formData.description,
+          price: parseFloat(formData.price),
+          stock: parseInt(formData.stock),
+          status: formData.status,
+          image_url: imageUrl,
+        })
+        setFormData({ name: '', description: '', price: '', stock: '', status: 'Active', image_url: '', image_file: null })
+        setShowForm(false)
+        setEditingProduct(null)
+        setSuccessMessage('Product updated successfully!')
+        setTimeout(() => setSuccessMessage(''), 3000)
+      } catch (err) {
+        console.error('Failed to update product:', err)
+        setSuccessMessage('Failed to update product. Please try again.')
+        setTimeout(() => setSuccessMessage(''), 3000)
+      } finally {
+        setIsSubmitting(false)
+      }
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setShowForm(false)
+    setEditingProduct(null)
+    setFormData({ name: '', description: '', price: '', stock: '', status: 'Active', image_url: '', image_file: null })
+  }
+
   const handleDeleteProduct = async (id: number) => {
     try {
       await deleteProduct(id)
@@ -134,10 +205,10 @@ export default function AdminProducts() {
         </div>
       )}
 
-      {/* Add Product Form */}
+      {/* Add/Edit Product Form */}
       {showForm && (
         <div className="bg-card border border-border rounded-lg p-6 space-y-4">
-          <h2 className="text-lg font-bold">Add New Product</h2>
+          <h2 className="text-lg font-bold">{editingProduct ? 'Edit Product' : 'Add New Product'}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
@@ -198,14 +269,17 @@ export default function AdminProducts() {
           </div>
           <div className="flex gap-3">
             <Button
-              onClick={handleAddProduct}
+              onClick={editingProduct ? handleUpdateProduct : handleAddProduct}
               disabled={isSubmitting}
               className="bg-primary hover:bg-primary/90"
             >
-              {isSubmitting ? 'Adding...' : 'Add Product'}
+              {isSubmitting
+                ? (editingProduct ? 'Updating...' : 'Adding...')
+                : (editingProduct ? 'Update Product' : 'Add Product')
+              }
             </Button>
             <Button
-              onClick={() => setShowForm(false)}
+              onClick={handleCancelEdit}
               variant="outline"
               disabled={isSubmitting}
             >
@@ -267,12 +341,17 @@ export default function AdminProducts() {
                       </span>
                     </td>
                     <td className="py-4 px-6 flex gap-2">
-                      <button className="p-2 hover:bg-secondary rounded transition-colors text-primary">
+                      <button
+                        onClick={() => handleEditProduct(product)}
+                        className="p-2 hover:bg-secondary rounded transition-colors text-primary"
+                        title="Edit Product"
+                      >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteProduct(product.id)}
                         className="p-2 hover:bg-secondary rounded transition-colors text-destructive"
+                        title="Delete Product"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
