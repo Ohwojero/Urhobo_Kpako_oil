@@ -34,9 +34,24 @@ export default function ProductCard({ product }: { product: Product }) {
   return (
     <div className="group bg-card rounded-2xl border border-border overflow-hidden hover:shadow-xl hover:border-primary/50 transition-all duration-300">
       {/* Image */}
-      <div className="relative w-full h-56 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-7xl overflow-hidden">
-        <div className="group-hover:scale-110 transition-transform duration-300">
-          {product.image}
+      <div className="relative w-full h-56 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center overflow-hidden">
+        <div className="group-hover:scale-110 transition-transform duration-300 w-full h-full flex items-center justify-center">
+          {product.image && product.image.startsWith('http') ? (
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                // Fallback to emoji if image fails to load
+                e.currentTarget.style.display = 'none'
+                e.currentTarget.nextElementSibling!.textContent = '🫒'
+                e.currentTarget.nextElementSibling!.className = 'text-7xl'
+              }}
+            />
+          ) : null}
+          {(!product.image || !product.image.startsWith('http')) && (
+            <span className="text-7xl">{product.image || '🫒'}</span>
+          )}
         </div>
         {product.inStock ? (
           <div className="absolute top-3 right-3 bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">

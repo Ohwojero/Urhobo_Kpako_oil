@@ -7,6 +7,7 @@ import { useProducts } from '@/context/product-context'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import Loading from './loading'
+import { supabase } from '@/lib/supabase'
 
 type ProductFormData = {
   name: string
@@ -14,6 +15,8 @@ type ProductFormData = {
   price: string
   stock: string
   status: 'Active'
+  image_url: string
+  image_file: File | null
 }
 
 export default function AdminProducts() {
@@ -28,6 +31,8 @@ export default function AdminProducts() {
     price: '',
     stock: '',
     status: 'Active',
+    image_url: '',
+    image_file: null,
   })
   const [successMessage, setSuccessMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -40,6 +45,29 @@ export default function AdminProducts() {
     if (formData.name && formData.price && formData.stock) {
       try {
         setIsSubmitting(true)
+        let imageUrl = formData.image_url
+
+        // Upload file to Supabase storage if a file is selected
+        if (formData.image_file) {
+          const fileExt = formData.image_file.name.split('.').pop()
+          const fileName = `${Math.random()}.${fileExt}`
+          const filePath = `products/${fileName}`
+
+          const { error: uploadError } = await supabase.storage
+            .from('images')
+            .upload(filePath, formData.image_file)
+
+          if (uploadError) {
+            throw uploadError
+          }
+
+          const { data } = supabase.storage
+            .from('images')
+            .getPublicUrl(filePath)
+
+          imageUrl = data.publicUrl
+        }
+
         await addProduct({
           name: formData.name,
           description: formData.description,
@@ -48,10 +76,11 @@ export default function AdminProducts() {
           status: formData.status,
           rating: 5,
           reviews: 0,
-          image: '🫒',
+          image: imageUrl || '🫒',
+          image_url: imageUrl,
           inStock: parseInt(formData.stock) > 0,
         })
-        setFormData({ name: '', description: '', price: '', stock: '', status: 'Active' })
+        setFormData({ name: '', description: '', price: '', stock: '', status: 'Active', image_url: '', image_file: null })
         setShowForm(false)
         setSuccessMessage('Product added successfully!')
         setTimeout(() => setSuccessMessage(''), 3000)
@@ -138,6 +167,27 @@ export default function AdminProducts() {
             >
               <option value="Active">Active</option>
             </select>
+            <input
+              type="text"
+              placeholder="Image URL (optional)"
+              value={formData.image_url}
+              onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+              className="px-4 py-2 rounded-lg border border-border bg-background text-foreground placeholder-muted-foreground"
+            />
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-foreground mb-2">Or Upload Image File</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFormData({ ...formData, image_file: e.target.files?.[0] || null })}
+                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+              />
+              {formData.image_file && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  Selected: {formData.image_file.name}
+                </p>
+              )}
+            </div>
             <textarea
               placeholder="Product Description"
               value={formData.description}
@@ -149,13 +199,15 @@ export default function AdminProducts() {
           <div className="flex gap-3">
             <Button
               onClick={handleAddProduct}
+              disabled={isSubmitting}
               className="bg-primary hover:bg-primary/90"
             >
-              Add Product
+              {isSubmitting ? 'Adding...' : 'Add Product'}
             </Button>
             <Button
               onClick={() => setShowForm(false)}
               variant="outline"
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
