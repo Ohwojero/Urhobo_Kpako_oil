@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="text-3xl">🫒</div>
-              <span className="text-2xl font-bold">Palma</span>
+              <span className="text-2xl font-bold">Urhobo Kpako Tv Oil</span>
             </div>
             <p className="text-sm opacity-90">
               Authentic Nigerian red palm oil. Preserving tradition, celebrating quality.
@@ -79,7 +79,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm opacity-80">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
-                +234 (0) 800 PALMA OIL
+                +234 (0) 800 URHOBO OIL
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />

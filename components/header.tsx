@@ -33,10 +33,7 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="w-9 h-9 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold text-lg border border-primary/20">
-              🫒
-            </div>
-            <span className="text-2xl font-bold text-primary hidden sm:inline">Palma</span>
+            <span className="text-xl font-bold text-primary">Urhobo Kpako TV Oil</span>
           </Link>
 
           {/* Desktop Navigation */}

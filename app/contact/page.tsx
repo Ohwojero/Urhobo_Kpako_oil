@@ -6,7 +6,7 @@ import { useState } from 'react'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { Button } from '@/components/ui/button'
-import { Mail, Phone, MapPin, Clock } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, Facebook, Instagram, Twitter, Youtube } from 'lucide-react'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -37,28 +37,25 @@ export default function ContactPage() {
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <Header />
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-b from-secondary to-background py-16 md:py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center space-y-4 max-w-2xl mx-auto">
-              <h1 className="text-5xl md:text-6xl font-bold">Get in Touch</h1>
-              <p className="text-lg text-muted-foreground">
+        {/* Contact Content */}
+        <section className="py-20 md:py-32">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center space-y-6 mb-16">
+              <h1 className="text-5xl md:text-7xl font-bold text-primary">
+                Get in Touch with Urhobo Kpako Tv Oil
+              </h1>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 We'd love to hear from you. Send us a message and we'll respond as soon as possible.
               </p>
             </div>
-          </div>
-        </section>
 
-        {/* Contact Content */}
-        <section className="py-16 md:py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
               {/* Contact Info */}
               {[
                 {
                   icon: Phone,
                   title: 'Phone',
-                  content: '+234 (0) 800 PALMA OIL',
+                  content: '+234 (0) 800 URHOBO OIL',
                   subtext: 'Mon-Fri, 9AM-6PM WAT',
                 },
                 {
@@ -76,12 +73,12 @@ export default function ContactPage() {
               ].map((item, i) => {
                 const Icon = item.icon
                 return (
-                  <div key={i} className="bg-card border border-border rounded-lg p-6 text-center space-y-4">
-                    <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mx-auto">
-                      <Icon className="w-6 h-6 text-primary" />
+                  <div key={i} className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-8 text-center space-y-4 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 hover:-translate-y-1">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mx-auto">
+                      <Icon className="w-8 h-8 text-primary" />
                     </div>
-                    <h3 className="text-lg font-bold">{item.title}</h3>
-                    <p className="text-foreground font-semibold">{item.content}</p>
+                    <h3 className="text-xl font-bold">{item.title}</h3>
+                    <p className="text-foreground font-semibold text-lg">{item.content}</p>
                     <p className="text-sm text-muted-foreground">{item.subtext}</p>
                   </div>
                 )
@@ -159,16 +156,42 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Business Hours */}
-            <div className="mt-12 max-w-2xl mx-auto bg-secondary/50 rounded-lg p-6 flex gap-4 items-start">
-              <Clock className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-              <div>
-                <h3 className="font-bold mb-2">Business Hours</h3>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>Monday - Friday: 9:00 AM - 6:00 PM WAT</li>
-                  <li>Saturday: 10:00 AM - 4:00 PM WAT</li>
-                  <li>Sunday: Closed</li>
-                </ul>
+            {/* Business Hours & Social Media */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-8 flex gap-6 items-start">
+                <Clock className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="text-xl font-bold mb-4">Business Hours</h3>
+                  <ul className="text-muted-foreground space-y-2">
+                    <li>Monday - Friday: 9:00 AM - 6:00 PM WAT</li>
+                    <li>Saturday: 10:00 AM - 4:00 PM WAT</li>
+                    <li>Sunday: Closed</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-8">
+                <h3 className="text-xl font-bold mb-6 text-center">Follow Us</h3>
+                <div className="flex justify-center gap-6">
+                  {[
+                    { icon: Facebook, label: 'Facebook', href: '#' },
+                    { icon: Instagram, label: 'Instagram', href: '#' },
+                    { icon: Twitter, label: 'Twitter', href: '#' },
+                    { icon: Youtube, label: 'YouTube', href: '#' },
+                  ].map((social, i) => {
+                    const Icon = social.icon
+                    return (
+                      <a
+                        key={i}
+                        href={social.href}
+                        className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-1"
+                        aria-label={social.label}
+                      >
+                        <Icon className="w-6 h-6 text-primary" />
+                      </a>
+                    )
+                  })}
+                </div>
               </div>
             </div>
           </div>

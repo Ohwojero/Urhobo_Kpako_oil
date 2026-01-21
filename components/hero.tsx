@@ -33,12 +33,12 @@ export default function Hero() {
           {/* Content */}
           <div className="space-y-8 text-white">
             <div className="space-y-4">
-              <p className="text-sm font-semibold text-primary uppercase tracking-widest">Premium Nigerian Product</p>
+              <p className="text-sm font-semibold text-primary uppercase tracking-widest">Authentic Urhobo Product</p>
               <h1 className="text-5xl md:text-7xl font-bold leading-tight text-balance">
-                Pure <span className="text-primary">Red Palm Oil</span>
+                Urhobo <span className="text-primary">Kpako TV Oil</span>
               </h1>
               <p className="text-lg text-white/90 text-pretty">
-                Sourced directly from the heart of Nigeria. Premium quality, traditional methods, and pure authenticity in every bottle.
+                Sourced directly from the Delta region of Nigeria. Traditional Urhobo methods, pure authenticity, and premium quality in every bottle.
               </p>
             </div>
 

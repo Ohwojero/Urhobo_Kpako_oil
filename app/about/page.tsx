@@ -3,22 +3,83 @@
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { Button } from '@/components/ui/button'
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, Users, Award, Heart, Leaf, Truck, Shield } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function AboutPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <Header />
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-b from-secondary to-background py-16 md:py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center space-y-4 max-w-2xl mx-auto">
-              <h1 className="text-5xl md:text-6xl font-bold">Our Story</h1>
-              <p className="text-lg text-muted-foreground">
-                Preserving Nigerian heritage, one bottle at a time
-              </p>
+        {/* Hero Section with Image */}
+        <section className="relative min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 overflow-hidden">
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <Image
+              src="/about-image.jpg"
+              alt="Urhobo community and palm oil production"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-black/50"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20"></div>
+          </div>
+
+          {/* Content */}
+          <div className="relative z-10 flex items-center min-h-screen">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-8 text-white">
+                  <div className="space-y-4">
+                    <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-primary px-4 py-2 rounded-full text-sm font-medium">
+                      <Heart className="w-4 h-4" />
+                      Our Heritage
+                    </div>
+                    <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+                      Authentic <span className="text-primary">Urhobo</span><br />
+                      Kpako TV Oil
+                    </h1>
+                    <p className="text-xl text-white/90 leading-relaxed max-w-lg">
+                      Preserving Delta region's rich heritage through traditional methods and modern quality standards. Every bottle tells a story of community, tradition, and excellence.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Link href="/products">
+                      <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 rounded-xl">
+                        Explore Our Products
+                      </Button>
+                    </Link>
+                    <Link href="#story">
+                      <Button size="lg" variant="outline" className="border-2 border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg font-semibold rounded-xl backdrop-blur-sm">
+                        Our Story
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-center border border-white/20">
+                    <div className="text-4xl font-bold text-primary mb-2">50+</div>
+                    <div className="text-white/80 font-medium">Years of Tradition</div>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-center border border-white/20">
+                    <div className="text-4xl font-bold text-primary mb-2">100%</div>
+                    <div className="text-white/80 font-medium">Natural & Pure</div>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-center border border-white/20">
+                    <div className="text-4xl font-bold text-primary mb-2">10k+</div>
+                    <div className="text-white/80 font-medium">Happy Customers</div>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-center border border-white/20">
+                    <div className="text-4xl font-bold text-primary mb-2">24/7</div>
+                    <div className="text-white/80 font-medium">Customer Support</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -31,7 +92,7 @@ export default function AboutPage() {
               <div>
                 <h2 className="text-4xl font-bold mb-6">Our Mission</h2>
                 <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                  Palma is dedicated to bringing authentic, premium Nigerian red palm oil to the world. We believe in preserving traditional methods while maintaining the highest standards of quality and purity.
+                  Urhobo Kpako TV Oil is dedicated to bringing authentic, premium Nigerian red palm oil to the world. We believe in preserving traditional methods while maintaining the highest standards of quality and purity.
                 </p>
                 <p className="text-lg text-muted-foreground leading-relaxed">
                   Every bottle represents our commitment to our customers' health and satisfaction, and our respect for the farmers and communities that make our product possible.
@@ -73,7 +134,7 @@ export default function AboutPage() {
 
             {/* Why Choose Us */}
             <div className="bg-secondary/50 rounded-xl p-12 space-y-8">
-              <h2 className="text-4xl font-bold">Why Choose Palma?</h2>
+              <h2 className="text-4xl font-bold">Why Choose Urhobo Kpako TV Oil?</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {[
                   '100% Pure Nigerian Red Palm Oil',
@@ -93,9 +154,9 @@ export default function AboutPage() {
 
             {/* CTA */}
             <div className="text-center space-y-6">
-              <h2 className="text-4xl font-bold">Ready to Experience Palma?</h2>
+              <h2 className="text-4xl font-bold">Ready to Experience Urhobo Kpako TV Oil?</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Join thousands of satisfied customers who have made Palma their trusted source for premium red palm oil.
+                Join thousands of satisfied customers who have made Urhobo Kpako TV Oil their trusted source for premium red palm oil.
               </p>
               <Link href="/products">
                 <Button size="lg" className="bg-primary hover:bg-primary/90">
