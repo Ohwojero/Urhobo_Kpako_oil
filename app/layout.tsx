@@ -11,7 +11,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Palma - Premium Nigerian Red Palm Oil',
+  title: 'Urhobo Kpako Tv Oil - Authentic Nigerian Red Palm Oil',
   description: 'Discover authentic, premium Nigerian red palm oil. Pure, natural, and crafted with tradition.',
   generator: 'Kpako Tv Oil',
   // icons: {
