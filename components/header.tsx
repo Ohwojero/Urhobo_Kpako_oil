@@ -28,12 +28,12 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-border shadow-sm">
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-white/30 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground font-bold text-lg">
+            <div className="w-9 h-9 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold text-lg border border-primary/20">
               🫒
             </div>
             <span className="text-2xl font-bold text-primary hidden sm:inline">Palma</span>
@@ -81,7 +81,7 @@ export default function Header() {
 
                     {/* User Dropdown */}
                     {userMenuOpen && (
-                      <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-lg py-2 z-10">
+                      <div className="absolute right-0 mt-2 w-48 bg-white/90 backdrop-blur-md border border-white/20 rounded-lg shadow-lg py-2 z-10">
                         <Link
                           href="/dashboard"
                           className="block px-4 py-2 text-foreground hover:bg-secondary/50 transition-colors text-sm"
