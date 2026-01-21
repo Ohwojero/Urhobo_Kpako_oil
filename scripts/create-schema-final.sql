@@ -123,6 +123,12 @@ CREATE POLICY "Users can view their own orders" ON orders
 CREATE POLICY "Users can create their own orders" ON orders
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+CREATE POLICY "Authenticated users can update orders" ON orders
+  FOR UPDATE USING (auth.uid() IS NOT NULL);
+
+CREATE POLICY "Authenticated users can view all orders" ON orders
+  FOR SELECT USING (auth.uid() IS NOT NULL);
+
 -- RLS Policies for order items
 CREATE POLICY "Users can view their order items" ON order_items
   FOR SELECT USING (

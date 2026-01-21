@@ -69,19 +69,81 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    const { error, data } = await supabase.auth.signUp({
-      email,
-      password,
-    })
-    if (error) throw error
+    try {
+      // Basic validation
+      if (!email || !password || !fullName) {
+        throw new Error('All fields are required')
+      }
 
-    // Create profile
-    if (data.user) {
-      await supabase.from('profiles').insert({
-        id: data.user.id,
-        email: data.user.email,
-        full_name: fullName,
+      if (password.length < 6) {
+        throw new Error('Password must be at least 6 characters long')
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(email)) {
+        throw new Error('Please enter a valid email address')
+      }
+
+      console.log('Attempting signup with:', { email, fullName })
+
+      const { error, data } = await supabase.auth.signUp({
+        email: email.toLowerCase().trim(),
+        password,
+        options: {
+          data: {
+            full_name: fullName.trim(),
+          }
+        }
       })
+
+      if (error) {
+        console.error('Supabase signup error:', error)
+
+        // Handle specific error cases
+        if (error.message.includes('already registered') || error.message.includes('already been registered')) {
+          throw new Error('An account with this email already exists')
+        }
+        if (error.message.includes('Invalid email') || error.message.includes('invalid email')) {
+          throw new Error('Please enter a valid email address')
+        }
+        if (error.message.includes('Password') || error.message.includes('password')) {
+          throw new Error('Password must be at least 6 characters long and contain a mix of letters and numbers')
+        }
+        if (error.message.includes('rate limit') || error.message.includes('too many requests')) {
+          throw new Error('Too many signup attempts. Please wait a few minutes and try again.')
+        }
+
+        // For 422 errors, provide a generic message
+        if (error.status === 422) {
+          throw new Error('Unable to create account. Please check your email and password format.')
+        }
+
+        throw new Error(error.message || 'Failed to create account')
+      }
+
+      console.log('Signup successful:', data)
+
+      // Create profile only if user was created
+      if (data.user) {
+        try {
+          const { error: profileError } = await supabase.from('profiles').insert({
+            id: data.user.id,
+            email: data.user.email,
+            full_name: fullName.trim(),
+          })
+          if (profileError) {
+            console.error('Profile creation error:', profileError)
+            // Don't throw here as the user account was created successfully
+          }
+        } catch (profileError) {
+          console.error('Profile creation failed:', profileError)
+        }
+      }
+
+    } catch (error: any) {
+      console.error('Signup failed:', error)
+      throw error
     }
   }
 
