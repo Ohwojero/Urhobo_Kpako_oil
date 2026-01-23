@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useCart } from '@/context/cart-context'
 import Image from 'next/image'
+import RatingStars from '@/components/rating-stars'
 
 interface Product {
   id: number
@@ -34,9 +35,9 @@ export default function ProductCard({ product, featured = false, viewMode = 'gri
   const [isAdding, setIsAdding] = useState(false)
   const [isWishlisted, setIsWishlisted] = useState(false)
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     setIsAdding(true)
-    addToCart({
+    await addToCart({
       id: product.id,
       name: product.name,
       price: product.price,
@@ -264,16 +265,7 @@ export default function ProductCard({ product, featured = false, viewMode = 'gri
         {/* Rating */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`w-3.5 h-3.5 ${
-                  i < Math.round(product.rating || 0)
-                    ? 'fill-yellow-400 text-yellow-400'
-                    : 'text-gray-300'
-                }`}
-              />
-            ))}
+            <RatingStars productId={product.id} initialRating={product.rating || 0} />
             <span className="text-xs text-muted-foreground ml-1.5 font-medium">
               {(product.rating || 0).toFixed(1)}
             </span>

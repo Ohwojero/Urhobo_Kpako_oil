@@ -7,25 +7,28 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
+import { Alert } from '@/components/ui/alert'
 import { toast } from 'sonner'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, AlertCircle } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
   const { signIn } = useAuth()
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError('')
     try {
       setIsLoading(true)
       await signIn(email, password)
       toast.success('Logged in successfully!')
       router.push('/dashboard')
     } catch (error: any) {
-      toast.error(error?.message || 'Login failed')
+      setError(error?.message || 'Login failed')
     } finally {
       setIsLoading(false)
     }
@@ -75,6 +78,13 @@ export default function LoginPage() {
                 disabled={isLoading}
               />
             </div>
+
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <span>{error}</span>
+              </Alert>
+            )}
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? 'Signing in...' : 'Sign In'}

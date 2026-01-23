@@ -90,8 +90,12 @@ export default function OrderDetailsPage() {
             {order.order_items.map((item: any) => (
               <div key={item.id} className="flex items-center justify-between p-4 bg-secondary/30 rounded">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center text-2xl">
-                    {item.products?.image_url || '🫒'}
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-accent/10 to-primary/10 flex items-center justify-center flex-shrink-0">
+                    <img
+                      src={item.products?.image_url}
+                      alt={item.products?.name}
+                      className="w-full h-full object-cover rounded"
+                    />
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">{item.products?.name}</p>

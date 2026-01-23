@@ -56,11 +56,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       })
       if (error) {
         console.error('Login error:', error)
+        console.log('Error message:', error.message)
         // Handle email not confirmed error
         if (error.message.includes('Email not confirmed')) {
           throw new Error('Please confirm your email before logging in. Check your inbox for the confirmation link.')
         }
-        throw new Error(error.message)
+        // Handle invalid credentials error
+        if (error.message.includes('Invalid') && error.message.includes('credentials')) {
+          throw new Error('Wrong email or password. Please try again.')
+        }
+        // For any other error, throw a generic message
+        throw new Error('Wrong email or password. Please try again.')
       }
     } catch (error) {
       console.error('Sign in failed:', error)

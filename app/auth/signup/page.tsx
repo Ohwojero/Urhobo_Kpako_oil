@@ -7,8 +7,9 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
+import { Alert } from '@/components/ui/alert'
 import { toast } from 'sonner'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, AlertCircle } from 'lucide-react'
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
@@ -16,14 +17,16 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [fullName, setFullName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
   const { signUp } = useAuth()
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError('')
 
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match')
+      setError('Passwords do not match')
       return
     }
 
@@ -33,7 +36,7 @@ export default function SignupPage() {
       toast.success('Account created successfully! Please check your email to confirm.')
       router.push('/auth/login')
     } catch (error: any) {
-      toast.error(error?.message || 'Sign up failed')
+      setError(error?.message || 'Sign up failed')
     } finally {
       setIsLoading(false)
     }
@@ -107,6 +110,13 @@ export default function SignupPage() {
                 disabled={isLoading}
               />
             </div>
+
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <span>{error}</span>
+              </Alert>
+            )}
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? 'Creating account...' : 'Sign Up'}

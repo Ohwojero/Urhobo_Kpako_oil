@@ -310,7 +310,13 @@ export default function CheckoutPage() {
                 {cartItems.length > 0 ? (
                   cartItems.map(item => (
                     <div key={item.id} className="bg-secondary/50 rounded-lg p-3 flex gap-3">
-                      <div className="text-3xl">🫒</div>
+                      <div className="w-8 h-8 bg-gradient-to-br from-accent/10 to-primary/10 rounded flex items-center justify-center flex-shrink-0">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-full h-full object-cover rounded"
+                        />
+                      </div>
                       <div className="flex-1">
                         <p className="font-semibold text-sm">{item.name}</p>
                         <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
